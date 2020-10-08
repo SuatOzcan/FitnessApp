@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FitnessApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +27,17 @@ namespace FitnessApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddHttpClient();  //I added this line.
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddHttpClient("WRITER", c => {
+                c.BaseAddress = new Uri("http://fitness.write.data.com:56789");
+                c.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
+            services.AddHttpClient("READER", c => {
+                c.BaseAddress = new Uri("http://fitness.read.data.com:56789");
+                c.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
+            services.AddSingleton<IDataStoreClient, FitnessDataStoreClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
