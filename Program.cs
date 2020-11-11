@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore;
 
 namespace FitnessApp
 {
@@ -13,15 +14,12 @@ namespace FitnessApp
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>().UseUrls(new string[]  { "http://[::]:80", "https://[::]:443",
-"http://[::]:65432", "https://[::]:65431" });
-                });
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+           WebHost.CreateDefaultBuilder(args).UseUrls(new string[] { "http://[::]:80", "https://[::]:443",
+                                                                     "http://[::]:65432", "https://[::]:65431" })
+                  .UseStartup<Startup>();
     }
 }
